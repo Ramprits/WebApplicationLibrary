@@ -10,6 +10,7 @@ namespace WebApplicationLibrary.Entities
             Database.Migrate();
         }
 
+
         public DbSet<Author> Authors { get; set; }
         public DbSet<Book> Books { get; set; }
 
