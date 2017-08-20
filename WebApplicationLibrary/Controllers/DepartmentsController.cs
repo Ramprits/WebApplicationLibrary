@@ -1,5 +1,6 @@
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using WebApplicationLibrary.Models;
@@ -13,17 +14,20 @@ namespace WebApplicationLibrary.Controllers
     {
         private readonly IDepartmentRepository _departmentRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger<DepartmentsController> _logger;
 
-        public DepartmentsController(IDepartmentRepository departmentRepository, IMapper mapper)
+        public DepartmentsController(IDepartmentRepository departmentRepository, IMapper mapper, ILogger<DepartmentsController> logger)
         {
             _departmentRepository = departmentRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpGet]
         public IActionResult Get()
         {
             var departmentFromRepo = _departmentRepository.GetDepartments();
+            _logger.LogInformation(100, "Department retrived sucessfully");
             return Ok(_mapper.Map<IEnumerable<DepartmentDto>>(departmentFromRepo));
         }
         [HttpGet("{departmentId}")]

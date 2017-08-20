@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Diagnostics;
+using NLog.Extensions.Logging;
 
 namespace WebApplicationLibrary
 {
@@ -60,6 +62,9 @@ namespace WebApplicationLibrary
             ILoggerFactory loggerFactory, LibraryContext libraryContext)
         {
             loggerFactory.AddConsole();
+            loggerFactory.AddDebug(LogLevel.Information);
+
+            loggerFactory.AddNLog();
 
             if (env.IsDevelopment())
             {
@@ -71,6 +76,13 @@ namespace WebApplicationLibrary
                 {
                     appBuilder.Run(async context =>
                     {
+                        var exceptionHandlerFeature = context.Features.Get<IExceptionHandlerFeature>();
+                        if (exceptionHandlerFeature != null)
+                        {
+                            var logger = loggerFactory.CreateLogger("Globle Exception logger");
+                            logger.LogError(500, exceptionHandlerFeature.Error, exceptionHandlerFeature.Error.Message);
+
+                        }
                         context.Response.StatusCode = 500;
                         await context.Response.WriteAsync("An unexpected fault happened. Try again later.");
 
