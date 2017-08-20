@@ -73,5 +73,24 @@ namespace WebApplicationLibrary.Controllers
             return NoContent();
         }
 
+        [HttpPut("{authorId}")]
+        public IActionResult Put(Guid authorId, [FromBody] AuthorForUpdateDto author)
+        {
+            if (author == null)
+            {
+                return NotFound();
+            }
+            if (!_repo.AuthorExists(authorId))
+            {
+                return BadRequest();
+            }
+            var authorFromRepo = _repo.GetAuthor(authorId);
+            _mapper.Map(author, authorFromRepo);
+            if (!_repo.Save())
+            {
+                return BadRequest();
+            }
+            return NoContent();
+        }
     }
 }

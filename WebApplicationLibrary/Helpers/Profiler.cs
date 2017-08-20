@@ -18,9 +18,14 @@ namespace WebApplicationLibrary.Helpers
                 ForMember(dest => dest.Age, opt => opt.MapFrom(x => x.DateOfBirth.GetCurrentAge()))
                 .ReverseMap();
             CreateMap<Book, Models.BookDto>().ReverseMap();
-
+            // Create Author
             CreateMap<AuthorForCreationDto, Author>().ReverseMap();
+            //Update Author
+            CreateMap<AuthorForUpdateDto, Author>().ReverseMap();
+
             CreateMap<BookForCreationDto, Book>().ReverseMap();
+
+            CreateMap<BookForUpdateDto, Book>().ReverseMap();
         }
     }
 }

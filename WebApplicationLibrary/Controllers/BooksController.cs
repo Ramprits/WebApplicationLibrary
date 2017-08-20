@@ -78,5 +78,27 @@ namespace WebApplicationLibrary.Controllers
             }
             return NoContent();
         }
+
+        [HttpPut("{bookId}")]
+        public IActionResult Put(Guid authorId, Guid bookId, [FromBody] BookForUpdateDto book)
+        {
+            if (!_repo.AuthorExists(authorId))
+            {
+                return NotFound();
+            }
+
+            var bookFromRepo = _repo.GetBookForAuthor(authorId, bookId);
+            if (bookFromRepo == null)
+            {
+                return NotFound($"update with {bookId} and with {authorId} doest save");
+            }
+            _mapper.Map(book, bookFromRepo);
+            _repo.UpdateBookForAuthor(bookFromRepo);
+            if (!_repo.Save())
+            {
+                return BadRequest();
+            }
+            return NoContent();
+        }
     }
 }
