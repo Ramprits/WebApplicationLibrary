@@ -26,16 +26,13 @@ namespace WebApplicationLibrary
 
         public IConfigurationRoot Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Add framework services.
-
             var connectionString = Configuration["connectionStrings:libraryDBConnectionString"];
             services.AddDbContext<LibraryContext>(o => o.UseSqlServer(connectionString));
             services.AddAutoMapper();
-            // register the repository
             services.AddScoped<ILibraryRepository, LibraryRepository>();
+            services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddMvc()
             .AddJsonOptions(opt =>
             {
@@ -57,10 +54,8 @@ namespace WebApplicationLibrary
                         .AllowAnyOrigin();
                 });
             });
-
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env,
             ILoggerFactory loggerFactory, LibraryContext libraryContext)
         {
@@ -83,7 +78,7 @@ namespace WebApplicationLibrary
                 });
             }
 
-            //libraryContext.EnsureSeedDataForContext();
+            libraryContext.EnsureSeedDataForContext();
 
             app.UseMvc();
         }

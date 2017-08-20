@@ -11,9 +11,119 @@ namespace WebApplicationLibrary.Entities
             // fresh with each demo.  Not advised for production environments, obviously :-)
 
             context.Authors.RemoveRange(context.Authors);
+            context.Departments.RemoveRange(context.Departments);
             context.SaveChanges();
 
             // init seed data
+            var departments = new List<Department>() {
+                new Department()
+                {
+                    DepartmentId = new Guid("9C51691A-B751-440F-B100-6AE544BFA8CD"),
+                    Name ="Software Developer",
+                    Location = "Mumbai Maharashtra",
+                    CreatedDate = new DateTimeOffset(new DateTime(2000, 9, 21)),
+                    Employees = new List<Employee>()
+                    {
+                        new Employee()
+                        {
+                            FirstName = "Ramprit",
+                            LastName = "Sahani",
+                            Gender = Gender.Male,
+                            CreatedDate = new DateTimeOffset(new DateTime(1947, 9, 21)),
+                             DepartmentId = new Guid("9C51691A-B751-440F-B100-6AE544BFA8CD")
+                        },
+                        new Employee()
+                        {
+                            FirstName = "Anita",
+                            LastName = "Sahani",
+                            Gender = Gender.Female,
+                            CreatedDate = new DateTimeOffset(new DateTime(1997, 9, 21)),
+                             DepartmentId = new Guid("9C51691A-B751-440F-B100-6AE544BFA8CD")
+                        }
+                    }
+                },
+                new Department()
+                {
+                    DepartmentId = new Guid("2822E752-E37E-4587-9C21-20B5DE586AA2"),
+                    Name ="HR",
+                    Location = "Pune Maharashtra",
+                    CreatedDate = new DateTimeOffset(new DateTime(2000, 9, 21)),
+                    Employees = new List<Employee>()
+                    {
+                        new Employee()
+                        {
+                            FirstName = "Rambhual",
+                            LastName = "Sahani",
+                            Gender = Gender.Male,
+                            CreatedDate = new DateTimeOffset(new DateTime(1947, 9, 21)),
+                            DepartmentId = new Guid("2822E752-E37E-4587-9C21-20B5DE586AA2")
+                        },
+                        new Employee()
+                        {
+                            FirstName = "Binda",
+                            LastName = "Sahani",
+                            Gender = Gender.Female,
+                            CreatedDate = new DateTimeOffset(new DateTime(1997, 9, 21)),
+                            DepartmentId = new Guid("2822E752-E37E-4587-9C21-20B5DE586AA2")
+                        }
+                    }
+                },
+                 new Department()
+                {
+                     
+                    DepartmentId = new Guid("D735231C-0083-4031-95A0-132870161E67"),
+                    Name ="Tester",
+                    Location = "Hydrabad",
+                    CreatedDate = new DateTimeOffset(new DateTime(2000, 9, 21)),
+                    Employees = new List<Employee>()
+                    {
+                        new Employee()
+                        {
+                            FirstName = "Ramprit",
+                            LastName = "Sahani",
+                            Gender = Gender.Male,
+                            CreatedDate = new DateTimeOffset(new DateTime(1947, 9, 21)),
+                            DepartmentId = new Guid("D735231C-0083-4031-95A0-132870161E67")
+                        },
+                        new Employee()
+                        {
+                            FirstName = "Anita",
+                            LastName = "Sahani",
+                            Gender = Gender.Female,
+                            CreatedDate = new DateTimeOffset(new DateTime(1997, 9, 21)),
+                            DepartmentId = new Guid("D735231C-0083-4031-95A0-132870161E67")
+                        }
+                    }
+                },
+                new Department()
+                {
+                    DepartmentId = new Guid("17EE9410-11D0-4DC3-99AC-6795CAFFE96A"),
+                    Name ="HR",
+                    Location = "Pune Maharashtra",
+                    CreatedDate = new DateTimeOffset(new DateTime(2000, 9, 21)),
+                    Employees = new List<Employee>()
+                    {
+                        new Employee()
+                        {
+                            FirstName = "Rambhual",
+                            LastName = "Sahani",
+                            Gender = Gender.Male,
+                            CreatedDate = new DateTimeOffset(new DateTime(1947, 9, 21)),
+                             DepartmentId = new Guid("17EE9410-11D0-4DC3-99AC-6795CAFFE96A"),
+                        },
+                        new Employee()
+                        {
+                            FirstName = "Binda",
+                            LastName = "Sahani",
+                            Gender = Gender.Female,
+                            CreatedDate = new DateTimeOffset(new DateTime(1997, 9, 21)),
+                             DepartmentId = new Guid("17EE9410-11D0-4DC3-99AC-6795CAFFE96A"),
+                        }
+                    }
+                }
+
+
+            };
             var authors = new List<Author>()
             {
                 new Author()
@@ -149,7 +259,7 @@ namespace WebApplicationLibrary.Entities
                      }
                 }
             };
-
+            context.Departments.AddRange(departments);
             context.Authors.AddRange(authors);
             context.SaveChanges();
         }

@@ -9,7 +9,7 @@ namespace WebApplicationLibrary.Entities
     public class Department
     {
         [Key]
-        public Guid DepartmentId { get; set; } = new Guid();
+        public Guid DepartmentId { get; set; } 
 
         public string Name { get; set; }
 

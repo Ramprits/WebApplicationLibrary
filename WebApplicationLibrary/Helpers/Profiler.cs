@@ -17,6 +17,11 @@ namespace WebApplicationLibrary.Helpers
                 .ForMember(des => des.Name, opt => opt.MapFrom(x => $"{x.FirstName } {x.LastName}")).
                 ForMember(dest => dest.Age, opt => opt.MapFrom(x => x.DateOfBirth.GetCurrentAge()))
                 .ReverseMap();
+
+            CreateMap<Department, DepartmentDto>().ReverseMap();
+
+            CreateMap<Employee, EmployeeDto>().ReverseMap();
+
             CreateMap<Book, Models.BookDto>().ReverseMap();
             // Create Author
             CreateMap<AuthorForCreationDto, Author>().ReverseMap();
