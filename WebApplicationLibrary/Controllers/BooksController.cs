@@ -5,11 +5,13 @@ using WebApplicationLibrary.Services;
 using AutoMapper;
 using WebApplicationLibrary.Models;
 using WebApplicationLibrary.Entities;
+using WebApplicationLibrary.Filter;
 
 namespace WebApplicationLibrary.Controllers
 {
     [Produces("application/json")]
     [Route("api/Authors/{authorId}/Books")]
+    [ValidateModel]
     public class BooksController : Controller
     {
         private readonly IMapper _mapper;
@@ -51,9 +53,17 @@ namespace WebApplicationLibrary.Controllers
         {
             if (book == null) return BadRequest();
             if (!_repo.AuthorExists(authorId)) return NotFound();
+            if (book.Title == book.Description)
+            {
+                ModelState.AddModelError(nameof(BookForCreationDto),
+                    "The provided description should be different from title .");
+            }
             var bookEntity = _mapper.Map<Book>(book);
             _repo.AddBookForAuthor(authorId, bookEntity);
-            if (!_repo.Save()) throw new Exception($"Creating book for {authorId} field not save !");
+            if (ModelState.IsValid)
+            {
+                if (!_repo.Save()) throw new Exception($"Creating book for {authorId} field not save !");
+            }
             var bookToReturn = _mapper.Map<BookDto>(bookEntity);
             return Created("GetBookForAuthor", bookToReturn);
         }

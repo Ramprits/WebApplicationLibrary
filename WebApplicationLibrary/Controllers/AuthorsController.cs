@@ -1,20 +1,19 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using WebApplicationLibrary.Services;
 using WebApplicationLibrary.Models;
 using Microsoft.AspNetCore.Cors;
 using WebApplicationLibrary.Entities;
+using WebApplicationLibrary.Filter;
 
 namespace WebApplicationLibrary.Controllers
 {
     [Produces("application/json")]
     [Route("api/Authors")]
     [EnableCors("AnyGET")]
+    [ValidateModel]
     public class AuthorsController : Controller
     {
         private readonly IMapper _mapper;
