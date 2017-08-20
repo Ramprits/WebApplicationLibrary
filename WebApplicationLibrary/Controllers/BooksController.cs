@@ -38,6 +38,10 @@ namespace WebApplicationLibrary.Controllers
             {
                 return NotFound();
             }
+            if (!_repo.BookExists(bookId))
+            {
+                return NotFound($"Book with {bookId} not found !");
+            }
             var getBooksForAuthor = _repo.GetBookForAuthor(authorId, bookId);
             return Ok(_mapper.Map<BookDto>(getBooksForAuthor));
         }
@@ -54,6 +58,25 @@ namespace WebApplicationLibrary.Controllers
             return Created("GetBookForAuthor", bookToReturn);
         }
 
+        [HttpDelete("{id}")]
+        public IActionResult Delete(Guid authorId, Guid id)
+        {
+            if (!_repo.AuthorExists(authorId))
+            {
+                return NotFound($"Author with {authorId} not found !");
+            }
+            var bookForAuthorFromRepo = _repo.GetBookForAuthor(authorId, id);
+            if (bookForAuthorFromRepo == null)
+            {
+                return NotFound();
+            }
+            _repo.DeleteBook(bookForAuthorFromRepo);
 
+            if (!_repo.Save())
+            {
+                return BadRequest($"Book delete is not sucessfully");
+            }
+            return NoContent();
+        }
     }
 }

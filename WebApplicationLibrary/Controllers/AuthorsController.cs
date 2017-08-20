@@ -19,12 +19,12 @@ namespace WebApplicationLibrary.Controllers
     {
         private readonly IMapper _mapper;
         private readonly ILibraryRepository _repo;
-
         public AuthorsController(IMapper mapper, ILibraryRepository repo)
         {
             _mapper = mapper;
             _repo = repo;
         }
+
         [HttpGet()]
         public IActionResult GetAuthors()
         {
@@ -56,5 +56,22 @@ namespace WebApplicationLibrary.Controllers
 
             return Created("GetAuthors", new { authorId = authorToReturn.Id });
         }
+
+        [HttpDelete("{authorId}")]
+        public IActionResult Delete(Guid authorId)
+        {
+            if (!_repo.AuthorExists(authorId))
+            {
+                return NotFound($"Author with {authorId} is not found !");
+            }
+            var getAuthorFromRepo = _repo.GetAuthor(authorId);
+            _repo.DeleteAuthor(getAuthorFromRepo);
+            if (!_repo.Save())
+            {
+                return BadRequest();
+            }
+            return NoContent();
+        }
+
     }
 }

@@ -48,6 +48,11 @@ namespace WebApplicationLibrary.Services
             return _context.Authors.Any(a => a.Id == authorId);
         }
 
+        public bool BookExists(Guid BookId)
+        {
+            return _context.Books.Any(a => a.Id == BookId);
+        }
+
         public void DeleteAuthor(Author author)
         {
             _context.Authors.Remove(author);

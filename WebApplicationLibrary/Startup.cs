@@ -83,7 +83,7 @@ namespace WebApplicationLibrary
                 });
             }
 
-            libraryContext.EnsureSeedDataForContext();
+            //libraryContext.EnsureSeedDataForContext();
 
             app.UseMvc();
         }
