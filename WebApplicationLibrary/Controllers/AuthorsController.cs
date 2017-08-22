@@ -7,6 +7,7 @@ using WebApplicationLibrary.Models;
 using Microsoft.AspNetCore.Cors;
 using WebApplicationLibrary.Entities;
 using WebApplicationLibrary.Filter;
+using WebApplicationLibrary.Helpers;
 
 namespace WebApplicationLibrary.Controllers
 {
@@ -17,24 +18,75 @@ namespace WebApplicationLibrary.Controllers
     public class AuthorsController : Controller
     {
         private readonly IMapper _mapper;
-        private readonly ILibraryRepository _repo;
-        public AuthorsController(IMapper mapper, ILibraryRepository repo)
+        private readonly ILibraryRepository _libraryRepository;
+        private IUrlHelper _urlHelper;
+        public AuthorsController(IMapper mapper, ILibraryRepository repo, IUrlHelper urlHelper
+           )
         {
             _mapper = mapper;
-            _repo = repo;
+            _libraryRepository = repo;
+            _urlHelper = urlHelper;
         }
 
-        [HttpGet()]
-        public IActionResult GetAuthors()
+        [HttpGet(Name = "GetAuthors")]
+        public IActionResult GetAuthors(AuthorsResourceParameters authorsResourceParameters)
         {
-            return base.Ok(_mapper.Map<IEnumerable<AuthorDto>>(_repo.GetAuthors()));
+            var authorsFromRepo = _libraryRepository.GetAuthors(authorsResourceParameters);
+            var author = _mapper.Map<IEnumerable<AuthorDto>>(authorsFromRepo);
+            return base.Ok(author);
 
         }
 
-        [HttpGet("{authorId}", Name = "GetAuthors")]
-        public IActionResult GetAuthors(Guid authorId)
+        private string CreateAuthorsResourceUri(
+              AuthorsResourceParameters authorsResourceParameters,
+              ResourceUriType type)
         {
-            var authoreFromRepo = _repo.GetAuthor(authorId);
+            switch (type)
+            {
+                case ResourceUriType.PreviousPage:
+                    return _urlHelper.Link("GetAuthors",
+                      new
+                      {
+                          fields = authorsResourceParameters.Fields,
+                          orderBy = authorsResourceParameters.OrderBy,
+                          searchQuery = authorsResourceParameters.SearchQuery,
+                          genre = authorsResourceParameters.Genre,
+                          pageNumber = authorsResourceParameters.PageNumber - 1,
+                          pageSize = authorsResourceParameters.PageSize
+                      });
+                case ResourceUriType.NextPage:
+                    return _urlHelper.Link("GetAuthors",
+                      new
+                      {
+                          fields = authorsResourceParameters.Fields,
+                          orderBy = authorsResourceParameters.OrderBy,
+                          searchQuery = authorsResourceParameters.SearchQuery,
+                          genre = authorsResourceParameters.Genre,
+                          pageNumber = authorsResourceParameters.PageNumber + 1,
+                          pageSize = authorsResourceParameters.PageSize
+                      });
+
+                default:
+                    return _urlHelper.Link("GetAuthors",
+                    new
+                    {
+                        fields = authorsResourceParameters.Fields,
+                        orderBy = authorsResourceParameters.OrderBy,
+                        searchQuery = authorsResourceParameters.SearchQuery,
+                        genre = authorsResourceParameters.Genre,
+                        pageNumber = authorsResourceParameters.PageNumber,
+                        pageSize = authorsResourceParameters.PageSize
+                    });
+            }
+        }
+
+
+
+
+        [HttpGet("{authorId}", Name = "GetAuthor")]
+        public IActionResult GetAuthor(Guid authorId)
+        {
+            var authoreFromRepo = _libraryRepository.GetAuthor(authorId);
             if (authoreFromRepo == null)
                 return NotFound($"Author with {authoreFromRepo} not found !");
             return Ok(authoreFromRepo);
@@ -46,8 +98,8 @@ namespace WebApplicationLibrary.Controllers
         {
             if (author == null) return BadRequest();
             var authorEntity = _mapper.Map<Author>(author);
-            _repo.AddAuthor(authorEntity);
-            if (!_repo.Save())
+            _libraryRepository.AddAuthor(authorEntity);
+            if (!_libraryRepository.Save())
             {
                 throw new Exception($" Creating an author is failed !");
             }
@@ -59,13 +111,13 @@ namespace WebApplicationLibrary.Controllers
         [HttpDelete("{authorId}")]
         public IActionResult Delete(Guid authorId)
         {
-            if (!_repo.AuthorExists(authorId))
+            if (!_libraryRepository.AuthorExists(authorId))
             {
                 return NotFound($"Author with {authorId} is not found !");
             }
-            var getAuthorFromRepo = _repo.GetAuthor(authorId);
-            _repo.DeleteAuthor(getAuthorFromRepo);
-            if (!_repo.Save())
+            var getAuthorFromRepo = _libraryRepository.GetAuthor(authorId);
+            _libraryRepository.DeleteAuthor(getAuthorFromRepo);
+            if (!_libraryRepository.Save())
             {
                 return BadRequest();
             }
@@ -79,13 +131,13 @@ namespace WebApplicationLibrary.Controllers
             {
                 return NotFound();
             }
-            if (!_repo.AuthorExists(authorId))
+            if (!_libraryRepository.AuthorExists(authorId))
             {
                 return BadRequest();
             }
-            var authorFromRepo = _repo.GetAuthor(authorId);
+            var authorFromRepo = _libraryRepository.GetAuthor(authorId);
             _mapper.Map(author, authorFromRepo);
-            if (!_repo.Save())
+            if (!_libraryRepository.Save())
             {
                 return BadRequest();
             }

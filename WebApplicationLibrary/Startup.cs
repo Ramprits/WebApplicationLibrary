@@ -11,6 +11,11 @@ using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Microsoft.AspNetCore.Diagnostics;
 using NLog.Extensions.Logging;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Routing;
+using WebApplicationLibrary.Data.Entities;
+using WebApplicationLibrary.Data.Service;
 
 namespace WebApplicationLibrary
 {
@@ -32,9 +37,26 @@ namespace WebApplicationLibrary
         {
             var connectionString = Configuration["connectionStrings:libraryDBConnectionString"];
             services.AddDbContext<LibraryContext>(o => o.UseSqlServer(connectionString));
+
+            var connectionNORTHWNDContextString = Configuration["connectionStrings:connectionNORTHWNDContextString"];
+            services.AddDbContext<NORTHWNDContext>(o => o.UseSqlServer(connectionNORTHWNDContextString));
+
             services.AddAutoMapper();
+
+            
+
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+
+            services.AddScoped<IUrlHelper>(implementationFactory =>
+            {
+                var actionContext = implementationFactory.GetService<IActionContextAccessor>()
+                .ActionContext;
+                return new UrlHelper(actionContext);
+            });
             services.AddScoped<ILibraryRepository, LibraryRepository>();
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
+
+            services.AddScoped<IProductRepository, ProductRepository>();
             services.AddMvc()
             .AddJsonOptions(opt =>
             {
