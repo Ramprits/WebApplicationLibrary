@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using WebApplicationLibrary.Data.Entities;
 using WebApplicationLibrary.Data.Service;
+using AspNetCoreRateLimit;
 
 namespace WebApplicationLibrary
 {
@@ -43,7 +44,7 @@ namespace WebApplicationLibrary
 
             services.AddAutoMapper();
 
-            
+
 
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
@@ -78,6 +79,29 @@ namespace WebApplicationLibrary
                         .AllowAnyOrigin();
                 });
             });
+            services.AddHttpCacheHeaders((expirationalModelHeader) =>
+            { expirationalModelHeader.MaxAge = 600; },
+            (validationModelOption) =>
+            { validationModelOption.AddMustRevalidate = true; }
+            );
+            services.AddMemoryCache();
+            services.Configure<IpRateLimitOptions>((options) =>
+            {
+                options.GeneralRules = new System.Collections.Generic.List<RateLimitRule>() {
+                new RateLimitRule(){
+                    Endpoint = "*",
+                    Limit = 1000,
+                    Period = "5m"
+                },
+                 new RateLimitRule(){
+                    Endpoint = "*",
+                    Limit = 200,
+                    Period = "10s"
+                }
+            };
+            });
+            services.AddSingleton<IRateLimitCounterStore, MemoryCacheRateLimitCounterStore>();
+            services.AddSingleton<IIpPolicyStore, MemoryCacheIpPolicyStore>();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env,
@@ -111,9 +135,9 @@ namespace WebApplicationLibrary
                     });
                 });
             }
-
+            app.UseIpRateLimiting();
             libraryContext.EnsureSeedDataForContext();
-
+            app.UseHttpCacheHeaders();
             app.UseMvc();
         }
     }
