@@ -9,9 +9,7 @@ using WebApplicationLibrary.Filter;
 
 namespace WebApplicationLibrary.Controllers
 {
-    [Produces("application/json")]
-    [Route("api/Authors/{authorId}/Books")]
-    [ValidateModel]
+    [Produces("application/json"), Route("api/Authors/{authorId}/Books"), ValidateModel]
     public class BooksController : Controller
     {
         private readonly IMapper _mapper;
@@ -22,6 +20,7 @@ namespace WebApplicationLibrary.Controllers
             _mapper = mapper;
             _repo = repo;
         }
+
         [HttpGet()]
         public IActionResult Get(Guid authorId)
         {
@@ -37,14 +36,11 @@ namespace WebApplicationLibrary.Controllers
         public IActionResult Get(Guid authorId, Guid bookId)
         {
             if (!_repo.AuthorExists(authorId))
-            {
                 return NotFound();
-            }
             if (!_repo.BookExists(bookId))
-            {
                 return NotFound($"Book with {bookId} not found !");
-            }
             var getBooksForAuthor = _repo.GetBookForAuthor(authorId, bookId);
+            if (getBooksForAuthor == null) throw new ArgumentNullException(nameof(getBooksForAuthor));
             return Ok(_mapper.Map<BookDto>(getBooksForAuthor));
         }
 

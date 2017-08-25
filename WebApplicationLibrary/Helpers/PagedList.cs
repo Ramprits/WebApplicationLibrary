@@ -11,23 +11,11 @@ namespace WebApplicationLibrary.Helpers
         public int PageSize { get; private set; }
         public int TotalCount { get; private set; }
 
-        public bool HasPrevious
-        {
-            get
-            {
-                return (CurrentPage > 1);
-            }
-        }
+        public bool HasPrevious => (CurrentPage > 1);
 
-        public bool HasNext
-        {
-            get
-            {
-                return (CurrentPage < TotalPages);
-            }
-        }
+        public bool HasNext => (CurrentPage < TotalPages);
 
-        public PagedList(List<T> items, int count, int pageNumber, int pageSize)
+        public PagedList(IEnumerable<T> items, int count, int pageNumber, int pageSize)
         {
             TotalCount = count;
             PageSize = pageSize;

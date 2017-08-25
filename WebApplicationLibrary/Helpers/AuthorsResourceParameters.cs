@@ -1,35 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WebApplicationLibrary.Helpers
+﻿namespace WebApplicationLibrary.Helpers
 {
     public class AuthorsResourceParameters
     {
-        const int maxPageSize = 20;
+        private const int MaxPageSize = 20;
         public int PageNumber { get; set; } = 1;
-
         private int _pageSize = 10;
         public int PageSize
         {
-            get
-            {
-                return _pageSize;
-            }
-            set
-            {
-                _pageSize = (value > maxPageSize) ? maxPageSize : value;
-            }
+            get => _pageSize;
+            set => _pageSize = (value > MaxPageSize) ? MaxPageSize : value;
         }
-
         public string Genre { get; set; }
-
         public string SearchQuery { get; set; }
-
         public string OrderBy { get; set; } = "Name";
-
         public string Fields { get; set; }
     }
 }

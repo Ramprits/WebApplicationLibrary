@@ -9,7 +9,7 @@ namespace WebApplicationLibrary.Migrations
 {
     [DbContext(typeof(LibraryContext))]
     [Migration("20170820065937_employee")]
-    partial class employee
+    partial class Employee
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

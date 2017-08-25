@@ -133,6 +133,7 @@ namespace WebApplicationLibrary.Entities
                      LastName = "King",
                      Genre = "Horror",
                      DateOfBirth = new DateTimeOffset(new DateTime(1947, 9, 21)),
+                     
                      Books = new List<Book>()
                      {
                          new Book()

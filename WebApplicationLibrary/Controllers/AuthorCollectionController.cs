@@ -7,8 +7,7 @@ using WebApplicationLibrary.Entities;
 
 namespace WebApplicationLibrary.Controllers
 {
-    [Produces("application/json")]
-    [Route("api/AuthorCollection")]
+    [Produces("application/json"), Route("api/AuthorCollection")]
     public class AuthorCollectionController : Controller
     {
         private readonly IMapper _mapper;
@@ -18,6 +17,7 @@ namespace WebApplicationLibrary.Controllers
             _mapper = mapper;
             _repo = repo;
         }
+
         [HttpPost]
         public IActionResult Post([FromBody] IEnumerable<AuthorForCreationDto> authorForCreationDto)
         {
@@ -25,8 +25,8 @@ namespace WebApplicationLibrary.Controllers
             {
                 return BadRequest();
             }
-            var AuthorForCreation = _mapper.Map<IEnumerable<Author>>(authorForCreationDto);
-            foreach (var author in AuthorForCreation)
+            var authorForCreation = _mapper.Map<IEnumerable<Author>>(authorForCreationDto);
+            foreach (var author in authorForCreation)
             {
                 _repo.AddAuthor(author);
             }

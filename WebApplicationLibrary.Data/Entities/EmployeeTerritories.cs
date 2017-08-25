@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplicationLibrary.Data.Entities
@@ -9,15 +7,14 @@ namespace WebApplicationLibrary.Data.Entities
     {
         [Column("EmployeeID")]
         public int EmployeeId { get; set; }
-        [Column("TerritoryID")]
-        [MaxLength(20)]
+
+        [Column("TerritoryID"), MaxLength(20)]
         public string TerritoryId { get; set; }
 
-        [ForeignKey("EmployeeId")]
-        [InverseProperty("EmployeeTerritories")]
+        [ForeignKey("EmployeeId"), InverseProperty("EmployeeTerritories")]
         public virtual Employees Employee { get; set; }
-        [ForeignKey("TerritoryId")]
-        [InverseProperty("EmployeeTerritories")]
+
+        [ForeignKey("TerritoryId"), InverseProperty("EmployeeTerritories")]
         public virtual Territories Territory { get; set; }
     }
 }

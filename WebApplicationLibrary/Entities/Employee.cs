@@ -11,7 +11,7 @@ namespace WebApplicationLibrary.Entities
         public string LastName { get; set; }
         public Gender Gender { get; set; }
         public DateTimeOffset CreatedDate { get; set; } = DateTimeOffset.Now;
-        
+
         [ForeignKey("DepartmentId")]
         public Department Departments { get; set; }
 

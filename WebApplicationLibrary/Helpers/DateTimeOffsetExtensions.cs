@@ -8,12 +8,8 @@ namespace WebApplicationLibrary.Helpers
         {
             var currentDate = DateTime.UtcNow;
             int age = currentDate.Year - dateTimeOffset.Year;
-
-            if (currentDate < dateTimeOffset.AddYears(age))
-            {
-                age--;
-            }
-
+            if (currentDate >= dateTimeOffset.AddYears(age)) return age;
+            age--;
             return age;
         }
     }

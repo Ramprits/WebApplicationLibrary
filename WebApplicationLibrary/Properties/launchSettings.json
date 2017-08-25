@@ -10,7 +10,7 @@
   "profiles": {
     "IIS Express": {
       "commandName": "IISExpress",
-      "launchUrl": "api/values",
+      "launchUrl": "api/authors",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production"
       }

@@ -1,0 +1,7 @@
+C:\Users\RAMPRIT\documents\Projects\WebApplicationLibrary\WebApplicationLibrary.Data\bin\Debug\netcoreapp1.1\WebApplicationLibrary.Data.deps.json
+C:\Users\RAMPRIT\documents\Projects\WebApplicationLibrary\WebApplicationLibrary.Data\bin\Debug\netcoreapp1.1\WebApplicationLibrary.Data.dll
+C:\Users\RAMPRIT\documents\Projects\WebApplicationLibrary\WebApplicationLibrary.Data\bin\Debug\netcoreapp1.1\WebApplicationLibrary.Data.pdb
+C:\Users\RAMPRIT\documents\Projects\WebApplicationLibrary\WebApplicationLibrary.Data\obj\Debug\netcoreapp1.1\WebApplicationLibrary.Data.AssemblyInfo.cs
+C:\Users\RAMPRIT\documents\Projects\WebApplicationLibrary\WebApplicationLibrary.Data\obj\Debug\netcoreapp1.1\WebApplicationLibrary.Data.dll
+C:\Users\RAMPRIT\documents\Projects\WebApplicationLibrary\WebApplicationLibrary.Data\obj\Debug\netcoreapp1.1\WebApplicationLibrary.Data.pdb
+C:\Users\RAMPRIT\documents\Projects\WebApplicationLibrary\WebApplicationLibrary.Data\obj\Debug\netcoreapp1.1\WebApplicationLibrary.Data.csprojResolveAssemblyReference.cache

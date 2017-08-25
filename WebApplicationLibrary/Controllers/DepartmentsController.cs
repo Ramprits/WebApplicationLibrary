@@ -8,8 +8,7 @@ using WebApplicationLibrary.Services;
 
 namespace WebApplicationLibrary.Controllers
 {
-    [Produces("application/json")]
-    [Route("api/Departments")]
+    [Produces("application/json"), Route("api/Departments")]
     public class DepartmentsController : Controller
     {
         private readonly IDepartmentRepository _departmentRepository;
@@ -30,6 +29,7 @@ namespace WebApplicationLibrary.Controllers
             _logger.LogInformation(100, "Department retrived sucessfully");
             return Ok(_mapper.Map<IEnumerable<DepartmentDto>>(departmentFromRepo));
         }
+
         [HttpGet("{departmentId}")]
         public IActionResult Get(Guid departmentId)
         {

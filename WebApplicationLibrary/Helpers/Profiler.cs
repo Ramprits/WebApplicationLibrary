@@ -1,9 +1,4 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WebApplicationLibrary.Entities;
 using WebApplicationLibrary.Models;
 
@@ -22,7 +17,7 @@ namespace WebApplicationLibrary.Helpers
 
             CreateMap<Employee, EmployeeDto>().ReverseMap();
 
-            CreateMap<Book, Models.BookDto>().ReverseMap();
+            CreateMap<Book, BookDto>().ReverseMap();
             // Create Author
             CreateMap<AuthorForCreationDto, Author>().ReverseMap();
             //Update Author

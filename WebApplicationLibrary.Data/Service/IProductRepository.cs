@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using WebApplicationLibrary.Data.Entities;
 
 namespace WebApplicationLibrary.Data.Service
@@ -10,15 +6,15 @@ namespace WebApplicationLibrary.Data.Service
     public interface IProductRepository
     {
         IEnumerable<Products> GetProducts();
-        Products GetProduct(int ProductID);
-        IEnumerable<Products> GetProducts(IEnumerable<int> ProductIDs);
+        Products GetProduct(int productId);
+        IEnumerable<Products> GetProducts(IEnumerable<int> productIDs);
         void AddProducts(Products products);
         void DeleteProducts(Products products);
         void UpdateProducts(Products products);
-        bool ProductsExists(int ProductID);
-        IEnumerable<OrderDetails> GetOrderDetailsForProducts(int ProductID);
-        OrderDetails GetOrderDetailsForProducts(int ProductID, int OrderID);
-        void AddOrderDetailsForProducts(int ProductID, OrderDetails orderDetail);
+        bool ProductsExists(int productId);
+        IEnumerable<OrderDetails> GetOrderDetailsForProducts(int productId);
+        OrderDetails GetOrderDetailsForProducts(int productId, int orderId);
+        void AddOrderDetailsForProducts(int productId, OrderDetails orderDetail);
         void UpdateOrderDetailsForProducts(OrderDetails orderDetail);
         void DeleteOrderDetails(OrderDetails orderDetail);
         bool OrderDetailsExists(int orderDetail);

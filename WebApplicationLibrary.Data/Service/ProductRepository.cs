@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WebApplicationLibrary.Data.Entities;
 
 namespace WebApplicationLibrary.Data.Service
@@ -10,15 +8,15 @@ namespace WebApplicationLibrary.Data.Service
     public class ProductRepository : IProductRepository
     {
 
-        private NORTHWNDContext _context;
+        private NorthwndContext _context;
 
-        public ProductRepository(NORTHWNDContext context)
+        public ProductRepository(NorthwndContext context)
         {
             _context = context;
         }
-        public void AddOrderDetailsForProducts(int ProductID, OrderDetails orderDetail)
+        public void AddOrderDetailsForProducts(int productId, OrderDetails orderDetail)
         {
-            var products = GetProduct(ProductID);
+            var products = GetProduct(productId);
             if (products != null)
             {
                 products.OrderDetails.Add(orderDetail);
@@ -48,14 +46,14 @@ namespace WebApplicationLibrary.Data.Service
             throw new NotImplementedException();
         }
 
-        public IEnumerable<OrderDetails> GetOrderDetailsForProducts(int ProductID)
+        public IEnumerable<OrderDetails> GetOrderDetailsForProducts(int productId)
         {
-            return _context.OrderDetails.Where(x => x.ProductId == ProductID).OrderBy(x => x.ProductId).ToList();
+            return _context.OrderDetails.Where(x => x.ProductId == productId).OrderBy(x => x.ProductId).ToList();
         }
 
-        public OrderDetails GetOrderDetailsForProducts(int ProductID, int OrderID)
+        public OrderDetails GetOrderDetailsForProducts(int productId, int orderId)
         {
-            return _context.OrderDetails.Where(x => x.ProductId == ProductID && x.OrderId == OrderID).FirstOrDefault();
+            return _context.OrderDetails.Where(x => x.ProductId == productId && x.OrderId == orderId).FirstOrDefault();
         }
 
         public IEnumerable<Products> GetProducts()
@@ -63,12 +61,12 @@ namespace WebApplicationLibrary.Data.Service
             return _context.Products.OrderBy(x => x.ProductName).ToList();
         }
 
-        public Products GetProduct(int ProductID)
+        public Products GetProduct(int productId)
         {
-            return _context.Products.FirstOrDefault(x => x.ProductId == ProductID);
+            return _context.Products.FirstOrDefault(x => x.ProductId == productId);
         }
 
-        public IEnumerable<Products> GetProducts(IEnumerable<int> ProductIDs)
+        public IEnumerable<Products> GetProducts(IEnumerable<int> productIDs)
         {
             throw new NotImplementedException();
         }
@@ -78,9 +76,9 @@ namespace WebApplicationLibrary.Data.Service
             return _context.OrderDetails.Any(x => x.OrderId == orderDetail);
         }
 
-        public bool ProductsExists(int ProductID)
+        public bool ProductsExists(int productId)
         {
-            return _context.Products.Any(x => x.ProductId == ProductID);
+            return _context.Products.Any(x => x.ProductId == productId);
         }
 
         public bool Save()

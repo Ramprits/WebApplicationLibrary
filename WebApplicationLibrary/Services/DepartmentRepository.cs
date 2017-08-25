@@ -7,44 +7,31 @@ namespace WebApplicationLibrary.Services
 {
     public class DepartmentRepository : IDepartmentRepository
     {
-        private LibraryContext _context;
+        private readonly LibraryContext _context;
 
-        public DepartmentRepository(LibraryContext context)
-        {
-            _context = context;
-        }
+        public DepartmentRepository(LibraryContext context) => _context = context;
 
         public void AddDepartment(Department department)
         {
+            if (department == null) return;
             department.DepartmentId = Guid.NewGuid();
             _context.Departments.Add(department);
-            if (department.Employees.Any())
+            if (!department.Employees.Any()) return;
+            foreach (var employee in department.Employees)
             {
-                foreach (var employee in department.Employees)
-                {
-                    employee.EmployeeId = Guid.NewGuid();
-                }
+                employee.EmployeeId = Guid.NewGuid();
             }
         }
 
         public void AddEmployeeForDepartment(Guid departmentId, Employee employee)
         {
             var department = GetDepartment(departmentId);
-            if (department != null)
-            {
-                // if there isn't an id filled out (ie: we're not upserting),
-                // we should generate one
-                if (employee.EmployeeId == null)
-                {
-                    employee.EmployeeId = Guid.NewGuid();
-                }
-                department.Employees.Add(employee);
-            }
+            department?.Employees.Add(employee);
         }
 
         public void DeleteDepartment(Department department)
         {
-            _context.Departments.Remove(department);
+            _context?.Departments.Remove(department);
         }
 
         public void DeleteEmployee(Employee employee)
@@ -74,13 +61,14 @@ namespace WebApplicationLibrary.Services
 
         public IEnumerable<Department> GetDepartments(IEnumerable<Guid> departmentIds)
         {
-            return _context.Departments.Where(x => departmentIds.Contains(x.DepartmentId)).OrderBy(x => x.Name).ToList();
+            return _context.Departments.Where(x => departmentIds.Contains(x.DepartmentId)).OrderBy(x => x.Name)
+                .ToList();
         }
 
         public Employee GetEmployeeForDepartment(Guid departmentId, Guid employeeId)
         {
-            return _context.Employees.
-                 Where(x => x.DepartmentId == departmentId && x.EmployeeId == employeeId).FirstOrDefault();
+            return _context.Employees
+                .FirstOrDefault(x => x.DepartmentId == departmentId && x.EmployeeId == employeeId);
         }
 
         public IEnumerable<Employee> GetEmployeesForDepartment(Guid departmentId)

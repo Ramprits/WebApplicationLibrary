@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace WebApplicationLibrary.Migrations
 {
-    public partial class department : Migration
+    public partial class Department : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {

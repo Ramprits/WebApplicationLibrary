@@ -6,11 +6,10 @@ namespace WebApplicationLibrary.Entities
 {
     public class Book
     {
-        [Key]       
+        [Key]
         public Guid Id { get; set; }
 
-        [Required]
-        [MaxLength(100)]
+        [Required, MaxLength(100)]
         public string Title { get; set; }
 
         [MaxLength(500)]

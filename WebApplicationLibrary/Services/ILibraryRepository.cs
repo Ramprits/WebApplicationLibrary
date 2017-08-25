@@ -19,7 +19,7 @@ namespace WebApplicationLibrary.Services
         void AddBookForAuthor(Guid authorId, Book book);
         void UpdateBookForAuthor(Book book);
         void DeleteBook(Book book);
-        bool BookExists(Guid BookId);
+        bool BookExists(Guid bookId);
         bool Save();
     }
 }

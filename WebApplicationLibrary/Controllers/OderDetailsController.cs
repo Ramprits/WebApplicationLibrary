@@ -1,8 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApplicationLibrary.Data.Service;
 using Microsoft.Extensions.Logging;
@@ -10,8 +5,7 @@ using AutoMapper;
 
 namespace WebApplicationLibrary.Controllers
 {
-    [Produces("application/json")]
-    [Route("api/Products/{ProductID}/OderDetails")]
+    [Produces("application/json"), Route("api/Products/{ProductID}/OderDetails")]
     public class OderDetailsController : Controller
     {
         private readonly IProductRepository _productRepository;
@@ -24,15 +18,14 @@ namespace WebApplicationLibrary.Controllers
             _logger = logger;
             _mapper = mapper;
         }
+
         [HttpGet]
-        public IActionResult GetOderDetails(int ProductId)
+        public IActionResult GetOderDetails(int productId)
         {
-            if (!_productRepository.ProductsExists(ProductId))
-            {
+            if (!_productRepository.ProductsExists(productId))
                 return NotFound();
-            }
-            var OderDetailFromRepo = _productRepository.GetOrderDetailsForProducts(ProductId);
-            return Ok(OderDetailFromRepo);
+            var oderDetailFromRepo = _productRepository.GetOrderDetailsForProducts(productId);
+            return Ok(oderDetailFromRepo);
         }
     }
 }

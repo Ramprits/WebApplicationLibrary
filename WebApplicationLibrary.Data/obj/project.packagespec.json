@@ -1,0 +1,55 @@
+﻿{
+  "version": "1.0.0",
+  "restore": {
+    "projectUniqueName": "C:\\Users\\RAMPRIT\\Documents\\Projects\\WebApplicationLibrary\\WebApplicationLibrary.Data\\WebApplicationLibrary.Data.csproj",
+    "projectName": "WebApplicationLibrary.Data",
+    "projectPath": "C:\\Users\\RAMPRIT\\Documents\\Projects\\WebApplicationLibrary\\WebApplicationLibrary.Data\\WebApplicationLibrary.Data.csproj",
+    "outputPath": "C:\\Users\\RAMPRIT\\Documents\\Projects\\WebApplicationLibrary\\WebApplicationLibrary.Data\\obj\\",
+    "projectStyle": "PackageReference",
+    "originalTargetFrameworks": [
+      "netcoreapp1.1"
+    ],
+    "frameworks": {
+      "netcoreapp1.1": {
+        "projectReferences": {}
+      }
+    }
+  },
+  "frameworks": {
+    "netcoreapp1.1": {
+      "dependencies": {
+        "Microsoft.NETCore.App": {
+          "target": "Package",
+          "version": "1.1.2"
+        },
+        "Microsoft.EntityFrameworkCore.Design": {
+          "suppressParent": "All",
+          "target": "Package",
+          "version": "1.1.2"
+        },
+        "Microsoft.EntityFrameworkCore.SqlServer": {
+          "target": "Package",
+          "version": "1.1.2"
+        },
+        "Microsoft.EntityFrameworkCore.SqlServer.Design": {
+          "suppressParent": "All",
+          "target": "Package",
+          "version": "1.1.2"
+        },
+        "Microsoft.EntityFrameworkCore.Tools": {
+          "suppressParent": "All",
+          "target": "Package",
+          "version": "1.1.1"
+        },
+        "AutoMapper.Extensions.Microsoft.DependencyInjection": {
+          "target": "Package",
+          "version": "1.2.0"
+        },
+        "Microsoft.Extensions.Logging.Debug": {
+          "target": "Package",
+          "version": "1.1.2"
+        }
+      }
+    }
+  }
+}

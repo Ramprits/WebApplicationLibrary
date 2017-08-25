@@ -49,9 +49,9 @@ namespace WebApplicationLibrary.Services
             return _context.Authors.Any(a => a.Id == authorId);
         }
 
-        public bool BookExists(Guid BookId)
+        public bool BookExists(Guid bookId)
         {
-            return _context.Books.Any(a => a.Id == BookId);
+            return _context.Books.Any(a => a.Id == bookId);
         }
 
         public void DeleteAuthor(Author author)

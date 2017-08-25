@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -12,17 +11,21 @@ namespace WebApplicationLibrary.Data.Entities
             OrderDetails = new HashSet<OrderDetails>();
         }
 
-        [Column("ProductID")]
-        [Key]
+        [Column("ProductID"), Key]
         public int ProductId { get; set; }
+
         [Required]
         public string ProductName { get; set; }
+
         [Column("SupplierID")]
         public int? SupplierId { get; set; }
+
         [Column("CategoryID")]
         public int? CategoryId { get; set; }
+
         [MaxLength(20)]
         public string QuantityPerUnit { get; set; }
+
         [Column(TypeName = "money")]
         public decimal? UnitPrice { get; set; }
         public short? UnitsInStock { get; set; }
@@ -32,11 +35,11 @@ namespace WebApplicationLibrary.Data.Entities
 
         [InverseProperty("Product")]
         public virtual ICollection<OrderDetails> OrderDetails { get; set; }
-        [ForeignKey("CategoryId")]
-        [InverseProperty("Products")]
+
+        [ForeignKey("CategoryId"), InverseProperty("Products")]
         public virtual Categories Category { get; set; }
-        [ForeignKey("SupplierId")]
-        [InverseProperty("Products")]
+
+        [ForeignKey("SupplierId"), InverseProperty("Products")]
         public virtual Suppliers Supplier { get; set; }
     }
 }

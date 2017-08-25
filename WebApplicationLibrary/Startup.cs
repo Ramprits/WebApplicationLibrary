@@ -14,9 +14,12 @@ using NLog.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
-using WebApplicationLibrary.Data.Entities;
 using WebApplicationLibrary.Data.Service;
 using AspNetCoreRateLimit;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Threading.Tasks;
+using WebApplicationLibrary.Data.Entities;
 
 namespace WebApplicationLibrary
 {
@@ -38,15 +41,11 @@ namespace WebApplicationLibrary
         {
             var connectionString = Configuration["connectionStrings:libraryDBConnectionString"];
             services.AddDbContext<LibraryContext>(o => o.UseSqlServer(connectionString));
-
-            var connectionNORTHWNDContextString = Configuration["connectionStrings:connectionNORTHWNDContextString"];
-            services.AddDbContext<NORTHWNDContext>(o => o.UseSqlServer(connectionNORTHWNDContextString));
-
+            var connectionNorthwndContextString = Configuration["connectionStrings:connectionNORTHWNDContextString"];
+            services.AddDbContext<NorthwndContext>(o => o.UseSqlServer(connectionNorthwndContextString));
             services.AddAutoMapper();
-
-
-
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+            services.AddIdentity<CampUser, IdentityRole>().AddEntityFrameworkStores<LibraryContext>();
 
             services.AddScoped<IUrlHelper>(implementationFactory =>
             {
@@ -56,9 +55,37 @@ namespace WebApplicationLibrary
             });
             services.AddScoped<ILibraryRepository, LibraryRepository>();
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-
             services.AddScoped<IProductRepository, ProductRepository>();
-            services.AddMvc()
+            services.AddTransient<CampIdentityInitializer>();
+            services.Configure<IdentityOptions>(config =>
+            {
+                config.Cookies.ApplicationCookie.Events =
+                new CookieAuthenticationEvents()
+                {
+                    OnRedirectToLogin = (ctx) =>
+                    {
+
+                        if (ctx.Request.Path.StartsWithSegments("/api") && ctx.Response.StatusCode == 200)
+                        {
+                            ctx.Response.StatusCode = 401;
+                        }
+                        return Task.CompletedTask;
+                    },
+                    OnRedirectToAccessDenied = (ctx) =>
+                    {
+
+                        if (ctx.Request.Path.StartsWithSegments("/api") && ctx.Response.StatusCode == 200)
+                        {
+                            ctx.Response.StatusCode = 403;
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
+            });
+            services.AddMvc(opt =>
+            {
+                opt.Filters.Add(new RequireHttpsAttribute());
+            })
             .AddJsonOptions(opt =>
             {
                 opt.SerializerSettings.ReferenceLoopHandling =
@@ -75,7 +102,7 @@ namespace WebApplicationLibrary
                 cfg.AddPolicy("AnyGET", bldr =>
                 {
                     bldr.AllowAnyHeader()
-                        .WithMethods("GET")
+                       .AllowAnyMethod()
                         .AllowAnyOrigin();
                 });
             });
@@ -105,7 +132,7 @@ namespace WebApplicationLibrary
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env,
-            ILoggerFactory loggerFactory, LibraryContext libraryContext)
+            ILoggerFactory loggerFactory, LibraryContext libraryContext, CampIdentityInitializer seeder)
         {
             loggerFactory.AddConsole();
             loggerFactory.AddDebug(LogLevel.Information);
@@ -138,6 +165,8 @@ namespace WebApplicationLibrary
             app.UseIpRateLimiting();
             libraryContext.EnsureSeedDataForContext();
             app.UseHttpCacheHeaders();
+            app.UseIdentity();
+            seeder.Seed().Wait();
             app.UseMvc();
         }
     }

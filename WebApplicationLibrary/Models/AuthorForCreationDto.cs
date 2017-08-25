@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using WebApplicationLibrary.Entities;
 
 namespace WebApplicationLibrary.Models
 {
@@ -15,5 +12,7 @@ namespace WebApplicationLibrary.Models
         public DateTimeOffset DateOfBirth { get; set; } = DateTimeOffset.Now;
 
         public string Genre { get; set; }
+
+        public CampUser  UserName { get; set; }
     }
 }

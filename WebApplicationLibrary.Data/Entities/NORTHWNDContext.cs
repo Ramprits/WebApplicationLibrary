@@ -1,10 +1,8 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 
 namespace WebApplicationLibrary.Data.Entities
 {
-    public partial class NORTHWNDContext : DbContext
+    public partial class NorthwndContext : DbContext
     {
         public virtual DbSet<Categories> Categories { get; set; }
         public virtual DbSet<CustomerCustomerDemo> CustomerCustomerDemo { get; set; }

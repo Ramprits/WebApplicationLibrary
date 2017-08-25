@@ -8,24 +8,27 @@ using Microsoft.AspNetCore.Cors;
 using WebApplicationLibrary.Entities;
 using WebApplicationLibrary.Filter;
 using WebApplicationLibrary.Helpers;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
 
 namespace WebApplicationLibrary.Controllers
 {
-    [Produces("application/json")]
-    [Route("api/Authors")]
-    [EnableCors("AnyGET")]
-    [ValidateModel]
+    [Authorize, Produces("application/json"), Route("api/Authors"), EnableCors("AnyGET"), ValidateModel]
     public class AuthorsController : Controller
     {
         private readonly IMapper _mapper;
         private readonly ILibraryRepository _libraryRepository;
         private IUrlHelper _urlHelper;
-        public AuthorsController(IMapper mapper, ILibraryRepository repo, IUrlHelper urlHelper
+        private readonly UserManager<CampUser> _userManager;
+
+        public AuthorsController(IMapper mapper, ILibraryRepository repo, IUrlHelper urlHelper, UserManager<CampUser> userManager
            )
         {
             _mapper = mapper;
             _libraryRepository = repo;
             _urlHelper = urlHelper;
+            _userManager = userManager;
         }
 
         [HttpGet(Name = "GetAuthors")]
@@ -81,24 +84,34 @@ namespace WebApplicationLibrary.Controllers
         }
 
 
-
-
         [HttpGet("{authorId}", Name = "GetAuthor")]
         public IActionResult GetAuthor(Guid authorId)
         {
-            var authoreFromRepo = _libraryRepository.GetAuthor(authorId);
-            if (authoreFromRepo == null)
-                return NotFound($"Author with {authoreFromRepo} not found !");
-            return Ok(authoreFromRepo);
+            var campUser = _userManager.FindByNameAsync(this.User.Identity.Name);
+            if (campUser != null)
+            {
+                var authoreFromRepo = _libraryRepository.GetAuthor(authorId);
+                if (authoreFromRepo == null)
+                    return NotFound($"Author with {authoreFromRepo} not found !");
+                return Ok(authoreFromRepo);
+            }
+            return BadRequest();
+
 
         }
 
         [HttpPost]
-        public IActionResult Post([FromBody] AuthorForCreationDto author)
+        public async Task<IActionResult> Post([FromBody] AuthorForCreationDto author)
         {
             if (author == null) return BadRequest();
             var authorEntity = _mapper.Map<Author>(author);
-            _libraryRepository.AddAuthor(authorEntity);
+            var campUser = await _userManager.FindByNameAsync(this.User.Identity.Name);
+            if (campUser != null)
+            {
+                authorEntity.User = campUser;
+                _libraryRepository.AddAuthor(authorEntity);
+            }
+
             if (!_libraryRepository.Save())
             {
                 throw new Exception($" Creating an author is failed !");
